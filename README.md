@@ -1,6 +1,4 @@
-# scanf
-
-## A small scanf-implementation for python
+# scanf: A small scanf-implementation for python
 
 Python has powerful regular expressions but sometimes they are totally overkill when you just want to parse a simple-formatted string. C programmers use the scanf-function for these tasks (see link below).
 
@@ -15,18 +13,17 @@ Original code from:
 
 Modified original to make the %f more robust, as well as added %* modifier to skip fields.
 
-Version: 1.3
-
 ## Releases
-1.0	2010-10-11, J. Burnett
+
+### 1.0: 2010-10-11
     * Initial release
 
-1.1	2010-10-13, J. Burnett
+### 1.1: 2010-10-13
     * Changed regex from 'match' (only matches at beginning of line)
         to 'search' (matches anywhere in line)
     * Bugfix - ignore cast for skipped fields
 
-1.2	2013-05-30, J. Burnett
+### 1.2: 2013-05-30
     * Added 'collapseWhitespace' flag (defaults to True) to take the search
       string and replace all whitespace with regex string to match repeated
       whitespace.  This enables better matching in log files where the data
@@ -34,5 +31,5 @@ Version: 1.3
       amounts of whitespace between the columns, depending on the number
       of characters in the data itself.
       
-1.3	2016-01-18, J. Burnett
-    * Add 'extractdata' function.
+### 1.3: 2016-01-18
+    * Added 'extractdata' function.
