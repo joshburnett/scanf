@@ -1,5 +1,5 @@
 """
-Small scanf-implementation.
+Small scanf implementation.
 
 Python has powerful regular expressions but sometimes they are totally overkill
 when you just want to parse a simple-formatted string.
@@ -20,21 +20,21 @@ Original code from:
 Modified original to make the %f more robust, as well as added %* modifier to
 skip fields.
 
-Version: 1.3
+Version: 1.3.3
 
 Releases:
 1.0
-    2010-10-11, J. Burnett
+    2010-10-11
     * Initial release
 
 1.1
-    2010-10-13, J. Burnett
+    2010-10-13
     * Changed regex from 'match' (only matches at beginning of line)
         to 'search' (matches anywhere in line)
     * Bugfix - ignore cast for skipped fields
 
 1.2
-    2013-05-30, J. Burnett
+    2013-05-30
     * Added 'collapseWhitespace' flag (defaults to True) to take the search
       string and replace all whitespace with regex string to match repeated
       whitespace.  This enables better matching in log files where the data
@@ -43,13 +43,17 @@ Releases:
       of characters in the data itself.
       
 1.3
-    2016-01-18, J. Burnett
+    2016-01-18
     * Add 'extractdata' function.
+    
+1.3.1
+    2016-06-23
+    * Release to PyPi, now including README.md
 """
 import re
 import sys
 
-__version__ = '1.3'
+__version__ = '1.3.3'
 
 __all__ = ["scanf",'scanf_translate','scanf_compile']
 
