@@ -126,8 +126,8 @@ def scanf_compile(format, collapseWhitespace=True):
         for token, pattern, cast in scanf_translate:
             found = token.match(format, i)
             if found:
-            	if cast: # cast != None
-                	cast_list.append(cast)
+                if cast: # cast != None
+                    cast_list.append(cast)
                 groups = found.groupdict() or found.groups()
                 if groups:
                     pattern = pattern % groups
@@ -142,7 +142,7 @@ def scanf_compile(format, collapseWhitespace=True):
             format_pat += char
             i += 1
     if DEBUG:
-        print "DEBUG: %r -> %s" % (format, format_pat)
+        print("DEBUG: %r -> %s" % (format, format_pat))
     if collapseWhitespace:
         format_pat = re.sub('\s+',r'\s+',format_pat)
 
