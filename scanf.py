@@ -9,7 +9,6 @@ This implementation of scanf translates the simple scanf-format into
 regular expressions. Unlike C you can be sure that there are no buffer overflows
 possible.
 
-
 For more information see
   * http://www.python.org/doc/current/lib/node49.html
   * http://en.wikipedia.org/wiki/Scanf
@@ -19,43 +18,13 @@ Original code from:
 
 Modified original to make the %f more robust, as well as added %* modifier to
 skip fields.
-
-Version: 1.3.3
-
-Releases:
-1.0
-    2010-10-11
-    * Initial release
-
-1.1
-    2010-10-13
-    * Changed regex from 'match' (only matches at beginning of line)
-        to 'search' (matches anywhere in line)
-    * Bugfix - ignore cast for skipped fields
-
-1.2
-    2013-05-30
-    * Added 'collapseWhitespace' flag (defaults to True) to take the search
-      string and replace all whitespace with regex string to match repeated
-      whitespace.  This enables better matching in log files where the data
-      has been formatted for easier reading.  These cases have variable
-      amounts of whitespace between the columns, depending on the number
-      of characters in the data itself.
-      
-1.3
-    2016-01-18
-    * Add 'extractdata' function.
-    
-1.3.1
-    2016-06-23
-    * Release to PyPi, now including README.md
 """
 import re
 import sys
 
 __version__ = '1.3.3'
 
-__all__ = ["scanf",'scanf_translate','scanf_compile']
+__all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 
 
 DEBUG = False
@@ -195,34 +164,31 @@ def scanf(format, s=None, collapseWhitespace=True):
 def extractdata(pattern, text=None, filepath=None):
     """
     Read through an entire file or body of text one line at a time. Parse each line that matches the supplied pattern string and ignore the rest.
-    
+
     If *text* is supplied, it will be parsed according to the *pattern* string.
     If *text* is not supplied, the file at *filepath* will be opened and parsed.
     """
     y = []
     if text is None:
-        with open(filepath) as f:
-            for line in f:
-                match = scanf(pattern, line)
-                if match:
-                    if len(y) == 0:
-                        y = [[float(s)] for s in match]
-                    else:
-                        for i,ydata in enumerate(y):
-                            ydata.append(float(match[i]))
+        textsource = open(filepath, 'r')
     else:
-        for line in text.split('\n'):
-            match = scanf(pattern, line)
-            if match:
-                if len(y) == 0:
-                    y = [[float(s)] for s in match]
-                else:
-                    for i,ydata in enumerate(y):
-                        ydata.append(float(match[i]))
-                        
+        textsource = text.splitlines()
+        
+    for line in textsource:
+        match = scanf(pattern, line)
+        if match:
+            if len(y) == 0:
+                y = [[s] for s in match]
+            else:
+                for i,ydata in enumerate(y):
+                    ydata.append(match[i])
+
+    if text is None:
+        textsource.close()
+
     return y
 
-
+    
 
 if __name__ == "__main__":
     import doctest
