@@ -22,7 +22,7 @@ skip fields.
 import re
 import sys
 
-__version__ = '1.3.3'
+__version__ = '1.4'
 
 __all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 
@@ -173,7 +173,7 @@ def extractdata(pattern, text=None, filepath=None):
         textsource = open(filepath, 'r')
     else:
         textsource = text.splitlines()
-        
+
     for line in textsource:
         match = scanf(pattern, line)
         if match:
@@ -188,7 +188,7 @@ def extractdata(pattern, text=None, filepath=None):
 
     return y
 
-    
+
 
 if __name__ == "__main__":
     import doctest
