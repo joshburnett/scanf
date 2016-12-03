@@ -1,7 +1,7 @@
 from setuptools import setup
-import pypandoc
 
-scanf_long_description = pypandoc.convert('README.md', 'rst')
+with open('README.rst') as readme:
+    scanf_long_description = readme.read()
 
 import scanf
 
@@ -19,6 +19,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
     ],
 
     # metadata for upload to PyPI
