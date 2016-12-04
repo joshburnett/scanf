@@ -142,10 +142,7 @@ def scanf(format, s=None, collapseWhitespace=True):
     (66, 291, 123)
 
 
-    If the parameter s is a file-like object, s.readline is called.
-    If s is not specified, stdin is assumed.
-
-    The function returns a tuple of found values
+    scanf.scanf returns a tuple of found values
     or None if the format does not match.
     """
 

@@ -1,13 +1,77 @@
 scanf: A small scanf implementation for python
 ==============================================
 
-Python has powerful regular expressions but sometimes they are totally
-overkill when you just want to parse a simple-formatted string. C
-programmers use the scanf function for these tasks (see link below).
+Python has powerful regular expressions but they can be totally
+overkill for many simpler situations. Additionally, some common
+numerical formats require quite complex regex's to match them
+robustly. This python implementation of scanf internally translates the simple
+scanf format into regular expressions, then returns the parsed values.
 
-This implementation of scanf translates the simple scanf-format into
-regular expressions. Unlike C you can be sure that there are no buffer
-overflows possible.
+Usage
+-------------
+
+scanf.scanf(format, s=None, collapseWhitespace=True)
+
+*Arguments*
+
+- **format:** This is the format string comprised of plain text and tokens from the
+  table below.
+- **s:** String to be parsed
+- **collapseWhitespace:** When True, tells scanf to perform a greedy match with
+  whitespace in the input string, allowing for easy parsing of text that has
+  been formatted to be read more easily. This enables better matching in log files where the data
+  has been formatted for easier reading. These cases have variable
+  amounts of whitespace between the columns, depending on the number of
+  characters in the data itself.
+
+
+scanf supports the following formats:
+
+========  ===========
+Pattern   Meaning
+--------  -----------
+%c        One character
+%5c       5 characters
+%d, %i    int value
+%7d, %7i  int value with length 7
+%f        float value
+%o        octal value
+%X, %x    hex value
+%s        string terminated by whitespace
+========  ===========
+
+Any pattern with a * after the % (*e.g.*, '%*f') will result in scanf matching the pattern but
+omitting the matched portion from the results.  This is helpful when parts of
+the input string may change but should be ignored.
+
+The underlying regex operation is performed using 'search' rather than 'match',
+so scanf will return a match if the pattern string is matched anywhere in the line.
+
+
+*Examples:*
+
+>>> from scanf import scanf
+>>> scanf("%s - %d errors, %d warnings", "/usr/sbin/sendmail - 0 errors, 4 warnings")
+('/usr/sbin/sendmail', 0, 4)
+
+>>> scanf("%o %x %d", "0123 0x123 123")
+(66, 291, 123)
+
+>>> pattern = 'Power: %f [%], %s, Stemp: %f'
+>>> text = 'Power:   0.0 [%], Cool, Stemp: 23.73'
+>>> scanf(pattern, text)
+(0.0, 'Cool', 23.73)
+
+>>> pattern = 'Power: %f [%], %*s, Stemp: %f'   # note the '*' in %*s
+>>> scanf(pattern, text)
+(0.0, 23.73)
+
+
+scanf returns a tuple of parsed values if the input pattern is matched, or None if the format does not match.
+
+
+Other resources
+---------------------
 
 For more information see:
 
