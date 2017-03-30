@@ -106,7 +106,7 @@ def scanf_compile(format, collapseWhitespace=True):
         if not found:
             char = format[i]
             # escape special characters
-            if char in "()[]-.+*?{}<>\\":
+            if char in "^$()[]-.+*?{}<>\\":
                 format_pat += "\\"
             format_pat += char
             i += 1
