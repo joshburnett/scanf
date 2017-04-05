@@ -128,3 +128,8 @@ Releases
 - Changed README.md to README.rst, removing pypandoc dependency in setup.py
 - Removed most of the comments at the beginning of scanf.py, as they were
   redundant with those in the README.
+
+1.4.1: 2017-04-05
+~~~~~~~~~~~~~~~~~~
+
+- Added $^| characters to the list of special characters to escape in 'scanf_compile'. Thanks @MichaelWedel!

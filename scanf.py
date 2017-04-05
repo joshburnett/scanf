@@ -22,7 +22,7 @@ skip fields.
 import re
 import sys
 
-__version__ = '1.4'
+__version__ = '1.4.1'
 
 __all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 
