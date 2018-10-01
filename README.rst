@@ -55,7 +55,7 @@ so scanf will return a match if the pattern string is matched anywhere in the li
 ('/usr/sbin/sendmail', 0, 4)
 
 >>> scanf("%o %x %d", "0123 0x123 123")
-(66, 291, 123)
+(83, 291, 123)
 
 >>> pattern = 'Power: %f [%], %s, Stemp: %f'
 >>> text = 'Power:   0.0 [%], Cool, Stemp: 23.73'
