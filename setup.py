@@ -1,9 +1,9 @@
+import scanf
 from setuptools import setup
 
-with open('README.rst') as readme:
+with open('README.md') as readme:
     scanf_long_description = readme.read()
 
-import scanf
 
 setup(
     name = "scanf",
@@ -17,8 +17,6 @@ setup(
         'License :: OSI Approved :: MIT License',
 
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
 
@@ -27,6 +25,7 @@ setup(
     author_email = "scanf@burnettsonline.org",
     description = "A small scanf implementation",
     long_description=scanf_long_description,
+    long_description_content_type="text/markdown",
     license = "MIT",
     keywords = "scanf",
     platform = "any",
