@@ -14,15 +14,16 @@ For more information see
   * http://en.wikipedia.org/wiki/Scanf
 
 Original code from:
-	http://code.activestate.com/recipes/502213-simple-scanf-implementation/
+    http://code.activestate.com/recipes/502213-simple-scanf-implementation/
 
 Modified original to make the %f more robust, as well as added %* modifier to
 skip fields.
 """
 import re
 import sys
+from functools import lru_cache
 
-__version__ = '1.4.1'
+__version__ = '1.5'
 
 __all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 
@@ -30,61 +31,56 @@ __all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 DEBUG = False
 
 
-
 # As you can probably see it is relatively easy to add more format types.
 # Make sure you add a second entry for each new item that adds the extra
 #   few characters needed to handle the field ommision.
 scanf_translate = [
     (re.compile(_token), _pattern, _cast) for _token, _pattern, _cast in [
-    ("%c", "(.)", lambda x:x),
-    ("%\*c", "(?:.)", None),
+        ("%c", "(.)", lambda x:x),
+        ("%\*c", "(?:.)", None),
 
-    ("%(\d)c", "(.{%s})", lambda x:x),
-    ("%\*(\d)c", "(?:.{%s})", None),
+        ("%(\d)c", "(.{%s})", lambda x:x),
+        ("%\*(\d)c", "(?:.{%s})", None),
 
-    ("%(\d)[di]", "([+-]?\d{%s})", int),
-    ("%\*(\d)[di]", "(?:[+-]?\d{%s})", None),
+        ("%(\d)[di]", "([+-]?\d{%s})", int),
+        ("%\*(\d)[di]", "(?:[+-]?\d{%s})", None),
 
-    ("%[di]", "([+-]?\d+)", int),
-    ("%\*[di]", "(?:[+-]?\d+)", None),
+        ("%[di]", "([+-]?\d+)", int),
+        ("%\*[di]", "(?:[+-]?\d+)", None),
 
-    ("%u", "(\d+)", int),
-    ("%\*u", "(?:\d+)", None),
+        ("%u", "(\d+)", int),
+        ("%\*u", "(?:\d+)", None),
 
-    ("%[fgeE]", "([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", float),
-    ("%\*[fgeE]", "(?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", None),
+        ("%[fgeE]", "([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", float),
+        ("%\*[fgeE]", "(?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", None),
 
-    ("%s", "(\S+)", lambda x:x),
-    ("%\*s", "(?:\S+)", None),
+        ("%s", "(\S+)", lambda x:x),
+        ("%\*s", "(?:\S+)", None),
 
-    ("%([xX])", "(0%s[\dA-Za-f]+)", lambda x:int(x, 16)),
-    ("%\*([xX])", "(?:0%s[\dA-Za-f]+)", None),
+        ("%([xX])", "(0%s[\dA-Za-f]+)", lambda x:int(x, 16)),
+        ("%\*([xX])", "(?:0%s[\dA-Za-f]+)", None),
 
-    ("%o", "(0[0-7]*)", lambda x:int(x, 8)),
-    ("%\*o", "(?:0[0-7]*)", None),
+        ("%o", "(0[0-7]*)", lambda x:int(x, 8)),
+        ("%\*o", "(?:0[0-7]*)", None),
     ]]
-
 
 
 # Cache formats
 SCANF_CACHE_SIZE = 1000
-scanf_cache = {}
 
 
+@lru_cache(maxsize=SCANF_CACHE_SIZE)
 def scanf_compile(format, collapseWhitespace=True):
     """
     Translate the format into a regular expression
 
     For example:
-    >>> format_re, casts = _scanf_compile('%s - %d errors, %d warnings')
+    >>> format_re, casts = scanf_compile('%s - %d errors, %d warnings')
     >>> print format_re.pattern
     (\S+) \- ([+-]?\d+) errors, ([+-]?\d+) warnings
 
     Translated formats are cached for faster reuse
     """
-    compiled = scanf_cache.get(format)
-    if compiled:
-        return compiled
 
     format_pat = ""
     cast_list = []
@@ -113,14 +109,10 @@ def scanf_compile(format, collapseWhitespace=True):
     if DEBUG:
         print("DEBUG: %r -> %s" % (format, format_pat))
     if collapseWhitespace:
-        format_pat = re.sub('\s+',r'\s+',format_pat)
+        format_pat = re.sub(r'\s+', r'\\s+', format_pat)
 
     format_re = re.compile(format_pat)
-    if len(scanf_cache) > SCANF_CACHE_SIZE:
-        scanf_cache.clear()
-    scanf_cache[format] = (format_re, cast_list)
     return format_re, cast_list
-
 
 
 def scanf(format, s=None, collapseWhitespace=True):
@@ -139,15 +131,18 @@ def scanf(format, s=None, collapseWhitespace=True):
     >>> scanf("%s - %d errors, %d warnings", "/usr/sbin/sendmail - 0 errors, 4 warnings")
     ('/usr/sbin/sendmail', 0, 4)
     >>> scanf("%o %x %d", "0123 0x123 123")
-    (66, 291, 123)
+    (83, 291, 123)
 
 
     scanf.scanf returns a tuple of found values
     or None if the format does not match.
     """
 
-    if s == None: s = sys.stdin
-    if hasattr(s, "readline"): s = s.readline()
+    if s is None:
+        s = sys.stdin
+
+    if hasattr(s, "readline"):
+        s = s.readline()
 
     format_re, casts = scanf_compile(format, collapseWhitespace)
 
@@ -157,10 +152,10 @@ def scanf(format, s=None, collapseWhitespace=True):
         return tuple([casts[i](groups[i]) for i in range(len(groups))])
 
 
-
 def extractdata(pattern, text=None, filepath=None):
     """
-    Read through an entire file or body of text one line at a time. Parse each line that matches the supplied pattern string and ignore the rest.
+    Read through an entire file or body of text one line at a time. Parse each line that matches the supplied
+    pattern string and ignore the rest.
 
     If *text* is supplied, it will be parsed according to the *pattern* string.
     If *text* is not supplied, the file at *filepath* will be opened and parsed.
@@ -177,14 +172,13 @@ def extractdata(pattern, text=None, filepath=None):
             if len(y) == 0:
                 y = [[s] for s in match]
             else:
-                for i,ydata in enumerate(y):
+                for i, ydata in enumerate(y):
                     ydata.append(match[i])
 
     if text is None:
         textsource.close()
 
     return y
-
 
 
 if __name__ == "__main__":
