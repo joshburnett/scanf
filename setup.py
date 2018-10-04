@@ -16,6 +16,7 @@ def get_version(filename='scanf.py'):
                 break
     return version
 
+
 setup(
     name = "scanf",
     version = get_version(),
