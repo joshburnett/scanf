@@ -26,7 +26,7 @@ try:
 except ImportError:
     from backports.functools_lru_cache import lru_cache
 
-__version__ = '1.5'
+__version__ = '1.5.1'
 
 __all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 
