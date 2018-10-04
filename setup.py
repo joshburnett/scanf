@@ -1,13 +1,24 @@
-import scanf
+import re
 from setuptools import setup
 
 with open('README.md') as readme:
     scanf_long_description = readme.read()
 
 
+def get_version(filename='scanf.py'):
+    """ Extract version information from source code """
+    version = '' 
+    with open(filename, 'r') as fp:
+        for line in fp:
+            m = re.search('__version__ .* ''(.*)''', line)
+            if m is not None:
+                version = (m.group(1)).strip('\'')
+                break
+    return version
+
 setup(
     name = "scanf",
-    version = scanf.__version__,
+    version = get_version(),
 
     py_modules=["scanf"],
 
