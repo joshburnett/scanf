@@ -21,7 +21,10 @@ skip fields.
 """
 import re
 import sys
-from functools import lru_cache
+try:
+    from functools import lru_cache
+except ImportError:
+    from backports.functools_lru_cache import lru_cache
 
 __version__ = '1.5'
 

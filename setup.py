@@ -28,6 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     license = "MIT",
     keywords = "scanf",
+    install_requires=['backports.functools_lru_cache;python_version<"2.9"'],
     platform = "any",
     url = "https://github.com/joshburnett/scanf",
 )
