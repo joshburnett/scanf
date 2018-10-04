@@ -84,6 +84,10 @@ http://code.activestate.com/recipes/502213-simple-scanf-implementation/
 Releases
 --------
 
+### 1.5.2: 2018-10-04
+
+- Fixed installation issue 
+
 ### 1.5.1: 2018-10-04
 
 - Re-added Python 2.7 compatibility via backports.functools_lru_cache (thanks @eendebakpt!)
