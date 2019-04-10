@@ -39,32 +39,32 @@ DEBUG = False
 #   few characters needed to handle the field ommision.
 scanf_translate = [
     (re.compile(_token), _pattern, _cast) for _token, _pattern, _cast in [
-        ("%c", "(.)", lambda x:x),
-        ("%\*c", "(?:.)", None),
+        ("%c", "\s*(.)\s*", lambda x:x),
+        ("%\*c", "\s*(?:.)\s*", None),
 
         ("%(\d)c", "(.{%s})", lambda x:x),
         ("%\*(\d)c", "(?:.{%s})", None),
 
-        ("%(\d)[di]", "([+-]?\d{%s})", int),
-        ("%\*(\d)[di]", "(?:[+-]?\d{%s})", None),
+        ("%(\d)[di]", "\s*([+-]?\d{%s})", int),
+        ("%\*(\d)[di]", "\s*(?:[+-]?\d{%s})", None),
 
-        ("%[di]", "([+-]?\d+)", int),
-        ("%\*[di]", "(?:[+-]?\d+)", None),
+        ("%[di]", "\s*([+-]?\d+)", int),
+        ("%\*[di]", "\s*(?:[+-]?\d+)", None),
 
-        ("%u", "(\d+)", int),
-        ("%\*u", "(?:\d+)", None),
+        ("%u", "\s*(\d+)", int),
+        ("%\*u", "\s*(?:\d+)", None),
 
-        ("%[fgeE]", "([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", float),
-        ("%\*[fgeE]", "(?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", None),
+        ("%[fgeE]", "\s*([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", float),
+        ("%\*[fgeE]", "\s*(?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", None),
 
         ("%s", "(\S+)", lambda x:x),
         ("%\*s", "(?:\S+)", None),
 
-        ("%([xX])", "(0%s[\dA-Za-f]+)", lambda x:int(x, 16)),
-        ("%\*([xX])", "(?:0%s[\dA-Za-f]+)", None),
+        ("%([xX])", "\s*(0%s[\dA-Za-f]+)", lambda x:int(x, 16)),
+        ("%\*([xX])", "\s*(?:0%s[\dA-Za-f]+)", None),
 
-        ("%o", "(0[0-7]*)", lambda x:int(x, 8)),
-        ("%\*o", "(?:0[0-7]*)", None),
+        ("%o", "\s*(0[0-7]*)", lambda x:int(x, 8)),
+        ("%\*o", "\s*(?:0[0-7]*)", None),
     ]]
 
 
