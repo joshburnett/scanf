@@ -39,8 +39,8 @@ DEBUG = False
 #   few characters needed to handle the field ommision.
 scanf_translate = [
     (re.compile(_token), _pattern, _cast) for _token, _pattern, _cast in [
-        ("%c", "\s*(.)\s*", lambda x:x),
-        ("%\*c", "\s*(?:.)\s*", None),
+        ("%c", "(.)\s*", lambda x:x),
+        ("%\*c", "(?:.)\s*", None),
 
         ("%(\d)c", "(.{%s})", lambda x:x),
         ("%\*(\d)c", "(?:.{%s})", None),
