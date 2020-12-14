@@ -80,9 +80,9 @@ def test_binary():
     
 def test_integer():
     assert scanf_star("%i", "50")[0] == 50
-    #assert scanf_star("%i", "0x50")[0] == 0x50
-    #assert scanf_star("%i", "0o50")[0] == 0o50
-    #assert scanf_star("%i", "0b1100")[0] == 12
+    assert scanf_star("%i", "0x50")[0] == 0x50
+    assert scanf_star("%i", "0o50")[0] == 0o50
+    assert scanf_star("%i", "0b1100")[0] == 12
 
 def test_multiple():
     assert scanf_star("%s %s", "hello, world") == ("hello,", "world")

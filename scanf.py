@@ -45,11 +45,11 @@ scanf_translate = [
         (r"%(\d)c", r"(.{%s})", lambda x:x),
         (r"%\*(\d)c", r"(?:.{%s})", None),
 
-        (r"%(\d)[di]", r"([+-]?\d{%s})", int),
-        (r"%\*(\d)[di]", r"(?:[+-]?\d{%s})", None),
+        (r"%(\d)d", r"([+-]?\d{%s})", int),
+        (r"%\*(\d)d", r"(?:[+-]?\d{%s})", None),
 
-        (r"%[di]", r"([+-]?\d+)", int),
-        (r"%\*[di]", r"(?:[+-]?\d+)", None),
+        (r"%d", r"([+-]?\d+)", int),
+        (r"%\*d", r"(?:[+-]?\d+)", None),
 
         (r"%u", r"(\d+)", int),
         (r"%\*u", r"(?:\d+)", None),
@@ -68,9 +68,12 @@ scanf_translate = [
 
         (r"%b", r"(?:0[bB])?([01]+)", lambda x: int(x, 2)),
         (r"%\*b", r"(?:0[bB])?(?:[01]+)", None),
+
+        (r"%i", r"([+-]?(?:0[xXoObB])?[0-9a-fA-F]+)", lambda x: int(x, 0)),
+        (r"%\*i", r"(?:[+-]?(?:0[xXoObB])?[0-9a-fA-F]+)", None),
         
         (r"%r", r"(.*$)", lambda x: x),
-        (r"%*r", r"(?:.*$)", None),
+        (r"%\*r", r"(?:.*$)", None),
     ]]
 
 
