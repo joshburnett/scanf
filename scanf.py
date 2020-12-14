@@ -63,8 +63,14 @@ scanf_translate = [
         (r"%[xX]", r"((?:0[xX])?[\dA-Za-f]+)", lambda x:int(x, 16)),
         (r"%\*[xX]", r"(?:(?:0[xX])?[\dA-Fa-f]+)", None),
 
-        (r"%o", r"(0[0-7]*)", lambda x:int(x, 8)),
-        (r"%\*o", r"(?:0[0-7]*)", None),
+        (r"%o", r"(?:0[oO])?([0-7]+)", lambda x:int(x, 8)),
+        (r"%\*o", r"(?:(?:0[oO])?[0-7]+)", None),
+
+        (r"%b", r"(?:0[bB])?([01]+)", lambda x: int(x, 2)),
+        (r"%\*b", r"(?:0[bB])?(?:[01]+)", None),
+        
+        (r"%r", r"(.*$)", lambda x: x),
+        (r"%*r", r"(?:.*$)", None),
     ]]
 
 
