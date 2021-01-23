@@ -32,14 +32,14 @@ def test_literals():
     assert scanf_star("is: %d", "The number is: 52") == (52,)
     assert scanf_star("is: %d", "The number is 52") is None
     assert scanf_star("is: %d", "The number is: \n 52") == (52,)
-    
+
 def test_char():
     assert scanf_star("%c", "abc") == ('a',)
     assert scanf_star("%3c", "abc") == ('abc',)
     assert scanf_star("%5c", "abc") is None
     assert scanf_star("%s", "The first word") == ("The",)
     assert scanf_star("%s", "Including: punctuation") == ("Including:",)
-    
+
 def test_decimal():
     assert scanf_star("%d", "50")[0] == 50
     assert scanf_star("%d", "050")[0] == 50
@@ -58,11 +58,11 @@ def test_octal():
     #assert scanf_star("%o", "0o50")[0] == 0o50
     #assert scanf_star("%o", "0O50")[0] == 0o50
 
+@pytest.mark.xfail(reason="Not implemented yet")
 def test_binary():
-    pass
-    #assert scanf_star("%b", "1100")[0] == 12
-    #assert scanf_star("%b", "0b1100")[0] == 12
-    
+    assert scanf_star("%b", "1100")[0] == 12
+    assert scanf_star("%b", "0b1100")[0] == 12
+
 def test_integer():
     assert scanf_star("%i", "50")[0] == 50
     #assert scanf_star("%i", "0x50")[0] == 0x50
@@ -76,12 +76,9 @@ def test_multiple():
     # regular expressions: it is able to match the literal comma
     # rather than the preceding %s consuming it.
     assert scanf_star("%s, %s", "hello, world") == ("hello", "world")
-    
+
     assert scanf_star("%d - %d", "52 - 11") == (52, 11)
     mac =  scanf_star("%X:%X:%X:%X:%X:%X", "04:23:AB:03:ef:01")
     assert mac == (0x4, 0x23, 0xab, 0x3, 0xef, 0x1)
-    
-@pytest.mark.xfail(reason="Not implemented yet")
-def test_list():
-    assert scanf_star("%[d]", "4 2 2")[0] == [4, 2, 2]
+
     
