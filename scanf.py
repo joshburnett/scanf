@@ -39,32 +39,41 @@ DEBUG = False
 #   few characters needed to handle the field ommision.
 scanf_translate = [
     (re.compile(_token), _pattern, _cast) for _token, _pattern, _cast in [
-        ("%c", "(.)", lambda x:x),
-        ("%\*c", "(?:.)", None),
+        (r"%c", r"(.)", lambda x:x),
+        (r"%\*c", r"(?:.)", None),
 
-        ("%(\d)c", "(.{%s})", lambda x:x),
-        ("%\*(\d)c", "(?:.{%s})", None),
+        (r"%(\d)c", r"(.{%s})", lambda x:x),
+        (r"%\*(\d)c", r"(?:.{%s})", None),
 
-        ("%(\d)[di]", "([+-]?\d{%s})", int),
-        ("%\*(\d)[di]", "(?:[+-]?\d{%s})", None),
+        (r"%(\d)d", r"([+-]?\d{%s})", int),
+        (r"%\*(\d)d", r"(?:[+-]?\d{%s})", None),
 
-        ("%[di]", "([+-]?\d+)", int),
-        ("%\*[di]", "(?:[+-]?\d+)", None),
+        (r"%d", r"([+-]?\d+)", int),
+        (r"%\*d", r"(?:[+-]?\d+)", None),
 
-        ("%u", "(\d+)", int),
-        ("%\*u", "(?:\d+)", None),
+        (r"%u", r"(\d+)", int),
+        (r"%\*u", r"(?:\d+)", None),
 
-        ("%[fgeE]", "([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", float),
-        ("%\*[fgeE]", "(?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", None),
+        (r"%[fgeE]", r"([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", float),
+        (r"%\*[fgeE]", r"(?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)", None),
 
-        ("%s", "(\S+)", lambda x:x),
-        ("%\*s", "(?:\S+)", None),
+        (r"%s", r"(\S+)", lambda x:x),
+        (r"%\*s", r"(?:\S+)", None),
 
-        ("%([xX])", "(0%s[\dA-Za-f]+)", lambda x:int(x, 16)),
-        ("%\*([xX])", "(?:0%s[\dA-Za-f]+)", None),
+        (r"%[xX]", r"((?:0[xX])?[\dA-Za-f]+)", lambda x:int(x, 16)),
+        (r"%\*[xX]", r"(?:(?:0[xX])?[\dA-Fa-f]+)", None),
 
-        ("%o", "(0[0-7]*)", lambda x:int(x, 8)),
-        ("%\*o", "(?:0[0-7]*)", None),
+        (r"%o", r"(?:0[oO])?([0-7]+)", lambda x:int(x, 8)),
+        (r"%\*o", r"(?:(?:0[oO])?[0-7]+)", None),
+
+        (r"%b", r"(?:0[bB])?([01]+)", lambda x: int(x, 2)),
+        (r"%\*b", r"(?:0[bB])?(?:[01]+)", None),
+
+        (r"%i", r"([+-]?(?:0[xXoObB])?[0-9a-fA-F]+)", lambda x: int(x, 0)),
+        (r"%\*i", r"(?:[+-]?(?:0[xXoObB])?[0-9a-fA-F]+)", None),
+        
+        (r"%r", r"(.*$)", lambda x: x),
+        (r"%\*r", r"(?:.*$)", None),
     ]]
 
 
@@ -80,7 +89,7 @@ def scanf_compile(format, collapseWhitespace=True):
     For example:
     >>> format_re, casts = scanf_compile('%s - %d errors, %d warnings')
     >>> print format_re.pattern
-    (\S+) \- ([+-]?\d+) errors, ([+-]?\d+) warnings
+    (\\S+) \\- ([+-]?\\d+) errors, ([+-]?\\d+) warnings
 
     Translated formats are cached for faster reuse
     """
@@ -129,14 +138,11 @@ def scanf(format, s=None, collapseWhitespace=True):
       %o        octal value
       %X, %x    hex value
       %s        string terminated by whitespace
-
     Examples:
     >>> scanf("%s - %d errors, %d warnings", "/usr/sbin/sendmail - 0 errors, 4 warnings")
     ('/usr/sbin/sendmail', 0, 4)
     >>> scanf("%o %x %d", "0123 0x123 123")
     (83, 291, 123)
-
-
     scanf.scanf returns a tuple of found values
     or None if the format does not match.
     """
