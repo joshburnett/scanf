@@ -1,0 +1,33 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "scanf"
+authors = [{name = "Josh Burnett", email = "github@burnettsonline.org"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+requires-python = "==2.7, >=3.8"
+dependencies = [
+    "backports.functools_lru_cache; python_version<'2.9'",
+]
+
+[project.urls]
+Home = "https://github.com/joshburnett/scanf"
+
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.flit.module]
+name = "scanf"

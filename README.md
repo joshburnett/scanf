@@ -84,6 +84,16 @@ http://code.activestate.com/recipes/502213-simple-scanf-implementation/
 Releases
 --------
 
+### 1.6.0: 2025-02-15
+
+- Contributor improvements (thanks @ejeffrey!)
+  - Add integer support
+  - Convert regex strings to raw strings (fixes warnings in Python 3.13)
+  - Update octal format
+  - Add binary formats
+  - Add tests
+- Modernize project slightly: change from setup.py to pyproject.toml, move to src layout
+
 ### 1.5.2: 2018-10-04
 
 - Fixed installation issue 

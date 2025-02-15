@@ -1,5 +1,5 @@
 """
-Small scanf implementation.
+A small pure-Python scanf implementation
 
 Python has powerful regular expressions but sometimes they are totally overkill
 when you just want to parse a simple-formatted string.
@@ -10,14 +10,14 @@ regular expressions. Unlike C you can be sure that there are no buffer overflows
 possible.
 
 For more information see
-  * http://www.python.org/doc/current/lib/node49.html
+  * https://docs.python.org/3/library/re.html
   * http://en.wikipedia.org/wiki/Scanf
 
-Original code from:
+Original (pre-1.0) code from:
     http://code.activestate.com/recipes/502213-simple-scanf-implementation/
 
 Modified original to make the %f more robust, as well as added %* modifier to
-skip fields.
+skip fields. Other improvements over time as well.
 """
 import re
 import sys
@@ -26,7 +26,7 @@ try:
 except ImportError:
     from backports.functools_lru_cache import lru_cache
 
-__version__ = '1.5.2'
+__version__ = '1.6.0'
 
 __all__ = ["scanf", 'extractdata', 'scanf_translate', 'scanf_compile']
 
@@ -141,7 +141,7 @@ def scanf(format, s=None, collapseWhitespace=True):
     Examples:
     >>> scanf("%s - %d errors, %d warnings", "/usr/sbin/sendmail - 0 errors, 4 warnings")
     ('/usr/sbin/sendmail', 0, 4)
-    >>> scanf("%o %x %d", "0123 0x123 123")
+    >>> scanf("%o %x %d", "0o123 0x123 123")
     (83, 291, 123)
     scanf.scanf returns a tuple of found values
     or None if the format does not match.
